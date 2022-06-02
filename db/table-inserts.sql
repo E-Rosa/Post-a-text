@@ -1,0 +1,1 @@
+INSERT INTO user_credentials (user_uid, user_email, user_password) VALUES (uuid_generate_v4(), 'elias_rrosa@hotmail.com', '2010elias');
