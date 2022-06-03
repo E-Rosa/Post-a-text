@@ -7,12 +7,22 @@
     </head>
 
     <body>
-        <div class="login-container">
+        <div class="login-container" id="login-container">
             <input type="text" id="login-input" placeholder="username">
             <input type="password" id="password-input" placeholder="password">
-            <div id="button-container">
+            <div class="button-container">
                 <button id="login-button" >Login</button>
                 <button id="signup-button">Sign-up</button>
+            </div>
+        </div>
+
+        <div class="login-container" id="signup-container">
+            <input type="text" id="signup-email-input" placeholder="email">
+            <input type="text" id="signup-username-input" placeholder="username">
+            <input type="password" id="signup-password-input" placeholder="password">
+            <div class="button-container">
+                <button id="signup-goback-button">Go back</button>
+                <button id="signup-send-button">Send</button>
             </div>
         </div>
     </body>
