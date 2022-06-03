@@ -5,6 +5,7 @@ const db = require('./db/db-connection.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const userRoute = require('./routes/user.js'); //require router
+const signUpRoute = require('./routes/signUp.js');
 
 //Middleware
 app.use(express.static('./public'));
@@ -12,7 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 //Routes
-app.use('/api/user/', userRoute); //use the user file to handle endpoints that start with /api/user/
+app.use('/api/user', userRoute); //use the user file to handle endpoints that start with /api/user/
+app.use('/', signUpRoute);
+
 
 //GET endpoints--------------------------------------------------------------------------------------------------------
 app.get('/api/user/info', (req, res) =>{
