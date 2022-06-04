@@ -14,10 +14,14 @@ app.use(express.urlencoded({extended: false}));
 
 //Routes
 app.use('/api/user', userRoute); //use the user file to handle endpoints that start with /api/user/
-app.use('/', signUpRoute);
+app.use('/signup', signUpRoute);
 
 
 //GET endpoints--------------------------------------------------------------------------------------------------------
+app.get('/timeline.html', (req, res)=>{
+    res.status(200);
+    console.log('you hit the timeline for GET');
+})
 app.get('/api/user/info', (req, res) =>{
     res.status(200);
     console.log('you hit the user info api');

@@ -6,7 +6,7 @@ const db = require('../db/db-connection.js');
 const jwt = require('jsonwebtoken');
 
 
-router.use(express.static('../public/loginPage'));
+router.use(express.static('../public'));
 
 router
 .route('/credentials') //don't use user/api/credentials because /api/user/ is already the root of this router

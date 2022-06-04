@@ -6,7 +6,7 @@ const db = require('../db/db-connection.js');
 
 
 router
-.route('/signup')
+.route('/')
 .post((req, res) =>{
     //takes password,username and email from request
     const password = req.body.password;

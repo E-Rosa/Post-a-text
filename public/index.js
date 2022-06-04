@@ -36,7 +36,7 @@ function checkLoginData(){
     .then (data => {
         if(data){
         document.cookie = "accessToken=" + data.accessToken + ";";
-        window.location.href = "http://localhost:5001/loginPage.html";
+        window.location.href = "http://localhost:5001/timeline.html";
         }else{window.alert("Invalid password");}
     })
     .catch(err => console.log(err));
