@@ -1,1 +1,3 @@
 INSERT INTO user_credentials (user_uid, user_email, user_password) VALUES (uuid_generate_v4(), 'elias_rasdtmail.com', '2ahah');
+INSERT INTO all_tags (tag_id, tag_name, tag_description) VALUES (uuid_generate_v4(), "Drama", "A drama is a type of literature that is written for the purpose of being performed in front of an audience");
+INSERT INTO all_posts (post_id, post_title, post_body, post_description, post_tags_reference, post_author_reference) VALUES (uuid_generate_v4(), 'The cat story', 'There once was a cat named Big Joe, he had a particular interest in scratching, and the story goes on', 'There once was a cat named Big Joe, he had a particular interest in scratching.', 'f74f9633-bcd1-4e53-852f-3da929cd04dd', 'eliasrosa');

@@ -45,7 +45,7 @@ async function getUserPass(email){
 
 async function signUserUp(email, password, username){
   try{
-    const res = client.query("INSERT INTO user_credentials (user_uid, user_email, user_password, user_username) VALUES (uuid_generate_v4(), $1, $2, $3)", [email, password, username]);
+    const res = client.query("INSERT INTO user_credentials (user_email, user_password, user_username) VALUES ($1, $2, $3)", [email, password, username]);
     return res;
   } catch (err){
     return "an error occured, try again";
