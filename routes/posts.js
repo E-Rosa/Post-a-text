@@ -7,7 +7,6 @@ function authenticateToken(req, res, next){
    
     //check if there are cookies
     if(req.headers.cookie.split(';').length === 2){
-        console.log('yes');
         let accessToken = req.headers.cookie.split(';')[1].split('=')[1]; //access Token
         let email = req.headers.cookie.split(';')[0].split('=')[1]; //email
 
@@ -20,13 +19,11 @@ function authenticateToken(req, res, next){
             }
             //if valid, send 200
             else{
-                res.sendStatus(200);
-                
-                next();
+                next();   
             }
         })
     }else{
-        res.sendStatus(403); console.log('no-token or no-email'); next();
+        res.sendStatus(403); console.log('no-token or no-email');
     }
 
     //verify token comparing to secret
@@ -36,8 +33,10 @@ function authenticateToken(req, res, next){
 router.route('/')
 .get(authenticateToken, (req, res)=>{
     //after token verified, do
-    console.log(req.body);
-    let accessToken = req.body.accessToken;
+    //console.log(req.body);
+    //let accessToken = req.body.accessToken;
+
+    const data = db.getAllPosts().then(data => {res.json(data)});
 })
 
 module.exports = router;

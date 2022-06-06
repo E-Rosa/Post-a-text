@@ -42,6 +42,12 @@ async function getUserPass(email){
   }
 }
 
+async function getAllPosts(){
+  try{
+  const posts = await client.query("SELECT post_title, post_body, post_description, post_tags_reference, post_author_reference FROM all_posts LIMIT 5");
+  return posts.rows;
+  }catch(err){return 'error'};
+}
 
 async function signUserUp(email, password, username){
   try{
@@ -53,4 +59,4 @@ async function signUserUp(email, password, username){
 }
 
 
-module.exports = {getUserCredentials, signUserUp, getUserPass}
+module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts}
