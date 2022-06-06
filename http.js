@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const userRoute = require('./routes/user.js'); //require router
 const signUpRoute = require('./routes/signUp.js');
+const postsRoute = require('./routes/posts.js');
 
 //Middleware
 app.use(express.static('./public'));
@@ -15,20 +16,13 @@ app.use(express.urlencoded({extended: false}));
 //Routes
 app.use('/api/user', userRoute); //use the user file to handle endpoints that start with /api/user/
 app.use('/signup', signUpRoute);
+app.use('/api/posts', postsRoute);
 
 
 //GET endpoints--------------------------------------------------------------------------------------------------------
-app.get('/timeline.html', (req, res)=>{
-    res.status(200);
-    console.log('you hit the timeline for GET');
-})
 app.get('/api/user/info', (req, res) =>{
     res.status(200);
     console.log('you hit the user info api');
-})
-app.get('/api/posts', (req, res) =>{
-    res.status(200);
-    console.log('you hit the user posts api');
 })
 app.get('/api/tags', (req, res) =>{
     res.status(200);
@@ -42,30 +36,17 @@ app.post('/api/user/info', (req, res) =>{
     res.status(200);
     console.log('you hit the user info api FOR POST');
 })
-app.post('/api/posts', (req, res) =>{
-    res.status(200);
-    console.log('you hit the user posts api FOR POST');
-})
 app.post('/api/tags', (req, res) =>{
     res.status(200);
     console.log('you hit the user tags api FOR POST');
 })
 
 //DELETE endpoints--------------------------------------------------------------------------------------------------------------------------------------
-app.delete('/api/posts', (req, res) =>{
-    res.status(200);
-    console.log('you hit the user posts api FOR DELETE');
-})
-
 //PUT endpoints--------------------------------------------------------------------------------------------------------------------------------------
 
 app.put('/api/user/info', (req, res) =>{
     res.status(200);
     console.log('you hit the user info api FOR POST');
-})
-app.put('/api/posts', (req, res) =>{
-    res.status(200);
-    console.log('you hit the user posts api FOR POST');
 })
 
 //Deafult 404--------------------------------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 
-
+//document.cookie= "accessToken=";
+console.log(document.cookie);
 //query elements
 const loginContainer = document.getElementById('login-container');
 const loginInput = document.getElementById('login-input');
@@ -35,8 +36,14 @@ function checkLoginData(){
     //takes the json data               
     .then (data => {
         if(data){
-        document.cookie = "accessToken=" + data.accessToken + ";";
-        window.location.href = "http://localhost:5001/timeline.html";
+            let email = loginInput.value;
+            let accessToken = data.accessToken;
+            let date = new Date();
+            date.setTime(date.getTime() + (0.1 * 24 * 60 * 60 * 1000)); //next two hours
+        
+            document.cookie = "email=" + email + "; SameSite=None; Secure";
+            document.cookie = "accessToken=" + accessToken + "; expires=" + date.toUTCString() +";";
+            window.location.href = "http://localhost:5001/timeline.html";
         }else{window.alert("Invalid password");}
     })
     .catch(err => console.log(err));

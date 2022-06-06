@@ -2,10 +2,10 @@ GET http://localhost:5001/posts
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZWxpYXMiLCJpYXQiOjE2NTQxMTU5MjF9.9GVXfxRCdXDDYl1WnZpnNR2VbwhHdgOB_WXZrm6zUMk
 ###
 
-POST http://localhost:5001/login
+POST http://localhost:5001/api/posts
 Content-Type: application/json
-
 {
-    "username": "elias"
+   "accessToken": "eyJhbGciOiJIUzI1NiJ9.ZWxpYXNfcnJvc2FAaG90bWFpbC5jb20.KmL9gf_PcIrndVZdmkvh2tIqqjDjvcH3g5gclNQSk30",
+    "email": "elias"
 }
 
