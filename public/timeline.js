@@ -104,7 +104,7 @@ function createPost(title, description, tags, author){
     postTitle.innerHTML = title;
     postDescription.innerHTML = description;
 
-    /*  <div class="post"3
+    /*  <div class="post">
                     <div class="post-header-container">
                         <div class="profile-pic-container" id="timeline-pic-container">
                             <img class="profile-pic" id="timeline-pic" src="./images/default user.jpg">

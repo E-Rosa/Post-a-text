@@ -93,8 +93,21 @@ function sendSignUpData(){
             password: signUpPassInput.value
         })
         //transforms the body into JSON and returns it
-    }).then(res =>{console.log(res.json()); return res.json();})
+    }).then(res =>{
+            console.log(res.status);
+            return res;
+        })
     //catches errors
-    .then(data => {console.log(data)}).catch(error => console.log(error))
+    .then(res => {
+        console.log(res.status);
+        if(res.status === 200){
+            //showLoginContainer();
+        }
+        
+    }).catch(error => console.log(error))
 }
+
+//user sends email
+    //need to check if email already exists
+        //query database, return true
 

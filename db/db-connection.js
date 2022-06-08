@@ -21,7 +21,7 @@ const client = new Client({
 client.connect();
 
 //getter functions
-async function getUserCredentials(){
+async function getUserCredentials(email){
   try{
     const res = client.query("SELECT * FROM user_credentials");
     console.log(res);
@@ -42,6 +42,7 @@ async function getUserPass(email){
   }
 }
 
+//get posts from all_posts limit 5
 async function getAllPosts(){
   try{
   const posts = await client.query("SELECT post_title, post_body, post_description, post_tags_reference, post_author_reference FROM all_posts LIMIT 5");
@@ -49,14 +50,42 @@ async function getAllPosts(){
   }catch(err){return 'error'};
 }
 
+
+//checks if username is already in use
+async function checkUsername(username){
+  try{
+    const query = client.query("SELECT user_username FROM user_credentials WHERE user_username = $1;", [username]);
+    return query;
+  }catch (err){
+    return err;
+  }
+}
+
+//checks if email is already in use
+async function checkEmail(email){
+  try{
+    const query = client.query("SELECT user_email FROM user_credentials WHERE user_email = $1;", [email]);
+    //query.then(data=>console.log(data.rowCount));
+    return query;
+    }
+  catch (err){
+    return err;
+  }
+}
+//checkEmail('elias_rrosa@hotmail.com');
+
+
+//insert username pass and email into user_credentials
 async function signUserUp(email, password, username){
   try{
-    const res = client.query("INSERT INTO user_credentials (user_email, user_password, user_username) VALUES ($1, $2, $3)", [email, password, username]);
-    return res;
+    const res = client.query("INSERT INTO user_credentials (user_email, user_password, user_username) VALUES ($1, $2, $3);", [email, password, username]);
+    const insertUID = client.query("INSERT INTO user_info(user_uid, user_name) VALUES (uuid_generate_v4(), $1);", [username]);
+    const insertReference = await client.query("UPDATE user_info SET username_reference = '$1' WHERE user_name = '$1';", [username]);
+    //return res;
   } catch (err){
     return "an error occured, try again";
   }
 }
 
 
-module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts}
+module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts, checkUsername, checkEmail}

@@ -26,5 +26,9 @@ CREATE TABLE user_info (
     user_post_ids_reference UUID REFERENCES all_posts(post_id)
 );
 
+ALTER TABLE user_info ADD COLUMN user_following_reference VARCHAR(50) REFERENCES user_credentials(user_username);
+ALTER TABLE user_info ADD COLUMN user_followers_reference VARCHAR(50) REFERENCES user_credentials(user_username);
+ALTER TABLE user_info ADD COLUMN user_favorite_tags_reference VARCHAR(50) REFERENCES all_tags(tag_name);
+ALTER TABLE user_info ADD COLUMN user_bio VARCHAR(150);
 
 
