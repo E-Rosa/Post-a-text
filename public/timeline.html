@@ -97,6 +97,19 @@
             .username{
                 border-bottom:1px solid rgb(80, 45, 59);
             }
+            #follow-button{
+                background-color:rgb(80, 45, 59);
+                color:pink; 
+                padding:5px;
+                border-radius:10px;
+                border:0px solid;
+                font-family: 'Montserrat', sans-serif;
+                cursor:pointer; 
+                transition: .2s all ease;
+            }
+            #follow-button:hover{
+                opacity:80%;
+            }
             #followers-container{
                 display:flex;
                 align-items:center;
@@ -244,6 +257,7 @@
                 <img class="profile-pic" src="./images/default user.jpg">
             </div>
             <h2 class="username">Username</h2>
+            <button id="follow-button">Follow</button>
             <div id="followers-container">
                 <div id="followers">
                     <h3 id="followers-number">10</h3>

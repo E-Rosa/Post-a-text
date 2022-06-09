@@ -4,4 +4,9 @@ To do list
     1.1 Select entire line = ctrl + l
     1  .2 go back fast = ctrl + <= or ctrl + =>
 
-2. Add close and open button to profile panel
+2. add follow logic
+    2.1 add follow logic to check if user is already followed or not
+    
+
+            
+

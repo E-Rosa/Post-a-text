@@ -1,10 +1,37 @@
+//User authorization*******************************************************************************************************
+//if there are cookies
+if (document.cookie){
+    //if there are two or more cookies
+    if (document.cookie.split(';').length >= 2){
+        //grab accessToken and email
+        let accessToken = document.cookie.split(';')[1].split('=')[1]; //access Token
+        let email = document.cookie.split(';')[0].split('=')[1]; //email
+    }
+        //else go back to login page;
+        else{window.location.href="http://localhost:5001/index.html";}
+    }
+    //else go back to login page
+    else{window.location.href="http://localhost:5001/index.html";}
+//*****
+//*****
+//*****
+//*****
+//*****
+//*****
+//*****
+//Profile************************************************************************************************
 //queries elements
 let closeProfileIcon = document.getElementById('close-profile-icon');
 let profileContainer = document.getElementById('profile-container');
 let openProfileIconContainer = document.getElementById('open-icon-container');
+let followButton = document.getElementById('follow-button');
+
+//adds initial styles (correct animation bugs)
+profileContainer.style.display = 'flex';
 
 //adds listeners
 closeProfileIcon.addEventListener("click", toggleProfilePanel);
+followButton.addEventListener("click", follow);
 
 //close profile panel, open profile panel
 function toggleProfilePanel(){
@@ -43,21 +70,117 @@ function toggleProfilePanel(){
         openProfileIconContainer.style.display = 'none';
     }
 }
-
-//if there are cookies
-if (document.cookie){
-    //if there are two or more cookies
-    if (document.cookie.split(';').length >= 2){
-        //grab accessToken and email
-        let accessToken = document.cookie.split(';')[1].split('=')[1]; //access Token
-        let email = document.cookie.split(';')[0].split('=')[1]; //email
+//Gets initial user info
+fetch('http://localhost:5001/api/userInfo', {
+    method: 'GET',
+    credentials: "include",
+    cache: 'default',
+    headers: {
+        'append': document.cookie.split(';')[1].split('=')[1]
     }
-        //else go back to login page;
-        else{window.location.href="http://localhost:5001/index.html";}
-    }
-    //else go back to login page
-    else{window.location.href="http://localhost:5001/index.html";}
+}).then(res =>{ return res.json()})
+.then(data => {
+    console.log(data.rows[0]);
+    const username = data.rows[0].username_reference;
+    const user_bio = data.rows[0].user_bio;
+    const user_following = data.rows[0].user_following;
+    const user_followers = data.rows[0].user_followers;
+    const user_fav_tags = data.rows[0].user_favorite_tags_reference;
 
+    //console.log(username, user_followers, user_following, user_bio, user_fav_tags);
+    createUserInfo(username, user_followers, user_following, user_bio, user_fav_tags);
+});
+//changes HTML tags to user info
+function createUserInfo(username, followers, following, bio, tags){
+    //query elements
+    let profileContainer = document.getElementById('profile-container');
+    let usernameTag = document.querySelector('.username')
+    let followersNumber = document.getElementById('followers-number');
+    let followingNumber = document.getElementById('following-number');
+    let bioTag = document.getElementById('bio');
+    let favTagsContainer = document.getElementById('favorite-tags-container');
+    let favTag1 = document.getElementById('fav-tag-1');
+    let favTag2 = document.getElementById('fav-tag-2');
+    let favTag3 = document.getElementById('fav-tag-3');
+
+    //append HTML to elements
+    if(followers === undefined || followers === null){followersNumber.innerHTML = '0';}
+    else{followersNumber.innerHTML = followers;}
+    if(following === undefined || following === null){followingNumber.innerHTML = '0'}
+    else{followingNumber.innerHTML = following;}
+    if(bio === undefined || bio === null){bioTag.innerHTML = 'No bio'}
+    else{bioTag.innerHTML = bio;}
+    if(username === undefined || username === null){usernameTag.innerHTML = 'No username'}
+    else{usernameTag.innerHTML = username;}
+
+    //if tags exist
+    if(tags){
+        //if there is just one tag
+        if(typeof(tags) === 'string'){
+            favTag1.innerHTML = tags;
+        }else if(tags.length === 2){
+            favTag1.innerHTML = tags[0];
+            favTag2.innerHTML = tags[1];
+        }
+        else if(tags.length === 3){
+            favTag1.innerHTML = tags[0];
+            favTag2.innerHTML = tags[1];
+            favTag3.innerHTML = tags[2];
+        }
+    }
+}
+//shows profile panel with user info when click on post username
+function showProfile(){
+    //defines username
+    username = this.innerHTML;
+
+    //fetches user info on db based on username
+    fetch(`http://localhost:5001/api/userInfo/${username}`,{
+    method: 'GET',
+    credentials: "include",
+    cache: 'default',
+    headers: {
+        //appends token to header so it can be checked on back-end
+        'append': document.cookie.split(';')[1].split('=')[1]
+    }}).then(res => {return res.json()})
+    .then(data => {
+        console.log(data.rows[0]);
+        const username = data.rows[0].username_reference;
+        const user_bio = data.rows[0].user_bio;
+        const user_following = data.rows[0].user_following;
+        const user_followers = data.rows[0].user_followers;
+        const user_fav_tags = data.rows[0].user_favorite_tags_reference;
+
+        //console.log(username, user_followers, user_following, user_bio, user_fav_tags);
+        createUserInfo(username, user_followers, user_following, user_bio, user_fav_tags);
+        if(profileContainer.style.display != 'flex'){
+            toggleProfilePanel();
+        }
+
+    })
+
+}
+function follow(){
+    //finds username (closest sibling)
+    let username = this.previousElementSibling.innerHTML;
+
+    //fetches api to add a counter on number of followers and to add the relationship
+    fetch(`http://localhost:5001/api/userInfo/${username}`, {
+    method: 'PUT',
+    credentials: "include",
+    cache: 'default',
+    headers: {
+        'append': document.cookie.split(';')[1].split('=')[1]
+    }
+    })
+}
+//*****
+//*****
+//*****
+//*****
+//*****
+//*****
+//Timeline*****************************************************************************************************
 //returns a limit of 10 posts
 function getPostData(){
     fetch('http://localhost:5001/api/posts')                
@@ -118,6 +241,12 @@ function createPost(title, description, tags, author){
     postTitle.className = "post-title";
     postDescription.className = "post-description";
 
+    //appends listeners
+    username.addEventListener("click", showProfile);
+
+    //append styles
+    username.style.cursor='pointer';
+
     //appends elements to body
     timeline.appendChild(post);
     post.appendChild(postHeaderContainer);
@@ -143,6 +272,7 @@ function createPost(title, description, tags, author){
             tag1.innerHTML = tags[0];
             tag2.innerHTML = tags[1];
         }else if (tags.length == 3){
+            tag1.innerHTML = tags[0];
             tag2.innerHTML = tags[1];
             tag3.innerHTML = tags[2];
         }
@@ -169,61 +299,4 @@ function createPost(title, description, tags, author){
                     </div>
         </div>*/
 }
-//user profile preview
-fetch('http://localhost:5001/api/userInfo', {
-    method: 'GET',
-    credentials: "include",
-    cache: 'default',
-    headers: {
-        'append': document.cookie.split(';')[1].split('=')[1]
-    }
-}).then(res =>{ return res.json()})
-.then(data => {
-    console.log(data.rows[0]);
-    const username = data.rows[0].username_reference;
-    const user_bio = data.rows[0].user_bio;
-    const user_following = data.rows[0].user_following;
-    const user_followers = data.rows[0].user_followers;
-    const user_fav_tags = data.rows[0].user_favorite_tags_reference;
 
-    console.log(username, user_followers, user_following, user_bio, user_fav_tags);
-    createUserInfo(username, user_followers, user_following, user_bio, user_fav_tags);
-});
-function createUserInfo(username, followers, following, bio, tags){
-    //query elements
-    let profileContainer = document.getElementById('profile-container');
-    let usernameTag = document.querySelector('.username')
-    let followersNumber = document.getElementById('followers-number');
-    let followingNumber = document.getElementById('following-number');
-    let bioTag = document.getElementById('bio');
-    let favTagsContainer = document.getElementById('favorite-tags-container');
-    let favTag1 = document.getElementById('fav-tag-1');
-    let favTag2 = document.getElementById('fav-tag-2');
-    let favTag3 = document.getElementById('fav-tag-3');
-
-    //append HTML to elements
-    if(followers === undefined || followers === null){followersNumber.innerHTML = '0';}
-    else{followersNumber.innerHTML = followers;}
-    if(following === undefined || following === null){followingNumber.innerHTML = '0'}
-    else{followingNumber.innerHTML = following;}
-    if(bio === undefined || bio === null){bioTag.innerHTML = 'No bio'}
-    else{bioTag.innerHTML = bio;}
-    if(username === undefined || username === null){usernameTag.innerHTML = 'No username'}
-    else{usernameTag.innerHTML = username;}
-
-    //if tags exist
-    if(tags){
-        //if there is just one tag
-        if(typeof(tags) === 'string'){
-            favTag1.innerHTML = tags;
-        }else if(tags.length === 2){
-            favTag1.innerHTML = tags[0];
-            favTag2.innerHTML = tags[1];
-        }
-        else if(tags.length === 3){
-            favTag1.innerHTML = tags[0];
-            favTag2.innerHTML = tags[1];
-            favTag3.innerHTML = tags[2];
-        }
-    }
-}

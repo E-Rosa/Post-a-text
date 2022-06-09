@@ -41,6 +41,16 @@ async function getUserInfo(email){
     }
 }
 
+//get user info (based on username)
+async function getUserInfoWithUsername(username){
+  try{
+    const userInfo = client.query("SELECT * FROM user_info WHERE username_reference = $1", [username]);
+    return userInfo;
+  }catch(err){
+    return err;
+  }
+}
+
 //get single user password
 async function getUserPass(email){
   try{
@@ -96,6 +106,22 @@ async function signUserUp(email, password, username){
     return "an error occured, try again";
   }
 }
+//finish that function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+async function followUser(user_following, user_followed){
+    try{
+      //user followed = username
+      //user follwoing = email
+      //add user following +1
+      client.query("UPDATE user_info SET user_following = user_following + 1 WHERE user_email_reference = $1", [user_following]);
+      //add user follower +1
+      client.query("UPDATE user_info SET user_followers = user_followers + 1 WHERE username_reference = $1", [user_followed]);
+      //add user follower reference
+      client.query("UPDATE user_info SET user_following_reference =  WHERE user_email_reference = $1", [user_following]);
+
+    }catch(err){
+      return err;
+    }
+}
 
 
-module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts, checkUsername, checkEmail, getUserInfo}
+module.exports = {getUserInfoWithUsername, getUserCredentials, signUserUp, getUserPass, getAllPosts, checkUsername, checkEmail, getUserInfo}

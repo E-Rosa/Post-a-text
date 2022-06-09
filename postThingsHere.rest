@@ -2,6 +2,8 @@ GET http://localhost:5001/posts
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZWxpYXMiLCJpYXQiOjE2NTQxMTU5MjF9.9GVXfxRCdXDDYl1WnZpnNR2VbwhHdgOB_WXZrm6zUMk
 ###
 
+GET http://localhost:5001/api/userInfo/eliasrosa
+
 POST http://localhost:5001/api/posts
 Content-Type: application/json
 {
