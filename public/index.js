@@ -1,6 +1,6 @@
+//check cookies if necessary 
+//console.log(document.cookie);
 
-//document.cookie= "accessToken=";
-console.log(document.cookie);
 //query elements
 const loginContainer = document.getElementById('login-container');
 const loginInput = document.getElementById('login-input');
@@ -8,10 +8,6 @@ const passInput = document.getElementById('password-input');
 const loginButton = document.getElementById('login-button');
 const signUpButton = document.getElementById('signup-button');
 const signUpContainer = document.getElementById('signup-container');
-
-
-//test query
-//console.log(loginButton.innerHTML,loginInput,passInput,signUp);
 
 //adds events
 loginButton.addEventListener("click", checkLoginData);
@@ -26,23 +22,29 @@ function checkLoginData(){
         'Content-type':'application/json',
         'Accept':'application/json'
     },
-    body: JSON.stringify({
+    //turns body into a string
+    body: JSON.stringify({      
         email: loginInput.value,
         password: passInput.value
     })    
     })
-    //parses the data to json
+    //parses the response to json
     .then (res =>{return res.json()})          
-    //takes the json data               
+    //takes the response               
     .then (data => {
+        //if there is a response
         if(data){
             let email = loginInput.value;
             let accessToken = data.accessToken;
+            //date = two hours after now
             let date = new Date();
             date.setTime(date.getTime() + (0.1 * 24 * 60 * 60 * 1000)); //next two hours
-        
+            
+            //sets up cookies with email and accessToken
             document.cookie = "email=" + email + "; SameSite=None; Secure";
             document.cookie = "accessToken=" + accessToken + "; expires=" + date.toUTCString() +";";
+
+            //redirects user to timeline page
             window.location.href = "http://localhost:5001/timeline.html";
         }else{window.alert("Invalid password");}
     })
@@ -97,17 +99,22 @@ function sendSignUpData(){
             console.log(res.status);
             return res;
         })
-    //catches errors
+            //catches errors
     .then(res => {
         console.log(res.status);
+        //if email and username are available
         if(res.status === 200){
-            //showLoginContainer();
+            window.alert('signup successful!');
+            showLoginContainer();
+        }else if (res.status===301){
+            window.alert('email already in use');
+            signUpEmailInput.value = '';
+        }else if(res.status===302){
+            window.alert('username already in use');
+            signUpLoginInput.value = '';
         }
         
     }).catch(error => console.log(error))
 }
 
-//user sends email
-    //need to check if email already exists
-        //query database, return true
 

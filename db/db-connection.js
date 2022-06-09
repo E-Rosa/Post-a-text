@@ -31,6 +31,16 @@ async function getUserCredentials(email){
   }
 }
 
+//get user info (for profile)
+async function getUserInfo(email){
+    try{
+      const userInfo = client.query("SELECT * FROM user_info WHERE user_email_reference = $1", [email]);
+      return userInfo;
+    }catch(err){
+      return err;
+    }
+}
+
 //get single user password
 async function getUserPass(email){
   try{
@@ -88,4 +98,4 @@ async function signUserUp(email, password, username){
 }
 
 
-module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts, checkUsername, checkEmail}
+module.exports = {getUserCredentials, signUserUp, getUserPass, getAllPosts, checkUsername, checkEmail, getUserInfo}

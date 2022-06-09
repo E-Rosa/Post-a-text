@@ -31,7 +31,7 @@
             }
             /*Big containers*/
             #profile-container{
-                height:90%;
+                max-height:90%;
                 background-color:pink;
                 width: 20%;
                 margin:0px;
@@ -40,6 +40,7 @@
                 justify-content: center;
                 flex-direction: column;
                 border-radius:20px;
+                transition: 0.5s all ease;
             }
             #timeline-container{
                 height:90%;
@@ -69,6 +70,16 @@
             }
 
             /*Profile container children*/
+            #close-profile-icon{
+                width:13px;
+                align-self: flex-start;
+                margin-left:10%;
+                margin-top:10%;
+                cursor:pointer;
+            }
+            #close-profile-icon:hover{
+                opacity:80%;    
+            }
             .profile-pic-container{
                 width: 100px;
                 height:100px;
@@ -117,6 +128,7 @@
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
+                margin-bottom:10%;
             }
             /*Timeline children*/
             #tags-container{
@@ -225,7 +237,9 @@
     </head>
 
     <body>
+        <div id="open-icon-container"></div>
         <div id="profile-container">
+            <img id="close-profile-icon" src="./images/back-icon.png">
             <div class="profile-pic-container">
                 <img class="profile-pic" src="./images/default user.jpg">
             </div>
@@ -242,12 +256,10 @@
             </div>
             <u id="bio">I was once a big cat, now I can fly like a bird and I bark like a wolf.</u>
             <div id="favorite-tags-container">
-                <h4 class="tag">Drama</h4>
-                <h4 class="tag">Shakespeare</h4>
-                <h4 class="tag">Dostoievsky</h4>
-                <h4 class="tag">Romance</h4>
-                <h4 class="tag">Philisophy</h4>
-                <h4 class="tag">Art</h4>
+                <h4 class="tag" id="fav-tag-1"></h4>
+                <h4 class="tag" id="fav-tag-2"></h4>
+                <h4 class="tag" id="fav-tag-3"></h4>
+                
             </div>
         </div>
 

@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const userRoute = require('./routes/user.js'); //require router
 const signUpRoute = require('./routes/signUp.js');
 const postsRoute = require('./routes/posts.js');
+const userInfoRoute = require('./routes/userInfo.js');
 
 //Middleware
 app.use(express.static('./public'));
@@ -17,6 +18,7 @@ app.use(express.urlencoded({extended: false}));
 app.use('/api/user', userRoute); //use the user file to handle endpoints that start with /api/user/
 app.use('/signup', signUpRoute);
 app.use('/api/posts', postsRoute);
+app.use('/api/userInfo', userInfoRoute);
 
 
 //GET endpoints--------------------------------------------------------------------------------------------------------

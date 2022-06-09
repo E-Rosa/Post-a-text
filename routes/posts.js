@@ -16,6 +16,7 @@ function authenticateToken(req, res, next){
             if(err){
                 res.sendStatus(403);
                 console.log('invalid token');
+                res.end();
             }
             //if valid, send 200
             else{

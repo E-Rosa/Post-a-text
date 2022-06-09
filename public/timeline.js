@@ -1,3 +1,49 @@
+//queries elements
+let closeProfileIcon = document.getElementById('close-profile-icon');
+let profileContainer = document.getElementById('profile-container');
+let openProfileIconContainer = document.getElementById('open-icon-container');
+
+//adds listeners
+closeProfileIcon.addEventListener("click", toggleProfilePanel);
+
+//close profile panel, open profile panel
+function toggleProfilePanel(){
+    //if profile container isn't hidden
+    if(profileContainer.style.display != 'none'){
+        //hide it
+        profileContainer.style.opacity = '0%';
+        setTimeout(()=>{profileContainer.style.display = 'none';}, 500)
+
+        //show open icon
+        openProfileIconContainer.style.display = 'block';
+
+        //if the open icon wasn't created yet
+        if(openProfileIconContainer.childElementCount === 0){
+            //create it
+            let openPanelIcon = document.createElement('img');
+            openPanelIcon.src = './images/back-icon.png';
+            openPanelIcon.id = 'close-profile-icon';
+            openPanelIcon.style.backgroundColor = 'pink';
+            openPanelIcon.style.border = '1px solid pink';
+            openPanelIcon.style.borderRadius = '100%';
+            openPanelIcon.style.padding = '0px 5px 0px 5px';
+            openPanelIcon.style.animation = 'all 0.5s ease';
+            openPanelIcon.style.opacity = '0%';
+            openPanelIcon.addEventListener("click", toggleProfilePanel);
+            openProfileIconContainer.appendChild(openPanelIcon);
+            setTimeout(()=>{openPanelIcon.style.opacity = '100%'}, 500);
+        }
+    //else if the profile container is hidden
+    }else if (profileContainer.style.display == 'none'){
+        //display it
+        profileContainer.style.display = 'flex';
+        setTimeout(()=>{profileContainer.style.opacity = '100%';}, 500)
+
+        //hide open icon
+        openProfileIconContainer.style.display = 'none';
+    }
+}
+
 //if there are cookies
 if (document.cookie){
     //if there are two or more cookies
@@ -33,7 +79,6 @@ function getPostData(){
     });
 }
 getPostData();
-
 function createPost(title, description, tags, author){
     //query existing elements
     let timeline = document.getElementById("timeline");
@@ -123,4 +168,62 @@ function createPost(title, description, tags, author){
                         <p class="post-description">This is some text</p>
                     </div>
         </div>*/
+}
+//user profile preview
+fetch('http://localhost:5001/api/userInfo', {
+    method: 'GET',
+    credentials: "include",
+    cache: 'default',
+    headers: {
+        'append': document.cookie.split(';')[1].split('=')[1]
+    }
+}).then(res =>{ return res.json()})
+.then(data => {
+    console.log(data.rows[0]);
+    const username = data.rows[0].username_reference;
+    const user_bio = data.rows[0].user_bio;
+    const user_following = data.rows[0].user_following;
+    const user_followers = data.rows[0].user_followers;
+    const user_fav_tags = data.rows[0].user_favorite_tags_reference;
+
+    console.log(username, user_followers, user_following, user_bio, user_fav_tags);
+    createUserInfo(username, user_followers, user_following, user_bio, user_fav_tags);
+});
+function createUserInfo(username, followers, following, bio, tags){
+    //query elements
+    let profileContainer = document.getElementById('profile-container');
+    let usernameTag = document.querySelector('.username')
+    let followersNumber = document.getElementById('followers-number');
+    let followingNumber = document.getElementById('following-number');
+    let bioTag = document.getElementById('bio');
+    let favTagsContainer = document.getElementById('favorite-tags-container');
+    let favTag1 = document.getElementById('fav-tag-1');
+    let favTag2 = document.getElementById('fav-tag-2');
+    let favTag3 = document.getElementById('fav-tag-3');
+
+    //append HTML to elements
+    if(followers === undefined || followers === null){followersNumber.innerHTML = '0';}
+    else{followersNumber.innerHTML = followers;}
+    if(following === undefined || following === null){followingNumber.innerHTML = '0'}
+    else{followingNumber.innerHTML = following;}
+    if(bio === undefined || bio === null){bioTag.innerHTML = 'No bio'}
+    else{bioTag.innerHTML = bio;}
+    if(username === undefined || username === null){usernameTag.innerHTML = 'No username'}
+    else{usernameTag.innerHTML = username;}
+
+    //if tags exist
+    if(tags){
+        //if there is just one tag
+        if(typeof(tags) === 'string'){
+            favTag1.innerHTML = tags;
+        }else if(tags.length === 2){
+            favTag1.innerHTML = tags[0];
+            favTag2.innerHTML = tags[1];
+        }
+        else if(tags.length === 3){
+            favTag1.innerHTML = tags[0];
+            favTag2.innerHTML = tags[1];
+            favTag3.innerHTML = tags[2];
+        }
+    }
 }

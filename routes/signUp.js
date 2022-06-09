@@ -3,7 +3,8 @@ let router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../db/db-connection.js');
 
-
+//compares given email to emails in database
+//returns 200 if ok, 302 if invalid
 function checkEmail(req, res, next){
     //returns data if the email is used
     db.checkEmail(req.body.email).then(data=>{
@@ -18,6 +19,9 @@ function checkEmail(req, res, next){
         }
     });
 }
+
+//compares given username to usernames in database
+//returns 200 if ok, 302 if invalid
 function checkUsername(req, res, next){
     console.log(req.body.username);
     //returns data if the username is used
@@ -25,7 +29,7 @@ function checkUsername(req, res, next){
         //if the username is used
         if (data.rowCount > 0){
             //console.log('there is an username like that');
-            res.status(301);
+            res.status(302);
             res.end();  
         }else{
             //console.log('there isnt username like that');
@@ -42,20 +46,18 @@ router
     const username = req.body.username;
     const email = req.body.email;
 
-    console.log('past middleware');
-    
+    //steps below will only be executed after checkEmail and checkUsername succeed     
     //generates a salt to encode the password
     bcrypt.genSalt(10, (err, salt) =>{
         //hashes the password (encodes it more)
         bcrypt.hash(password, salt, (err, hash)=>{
             //Can only acess hash inside of this callback
             //insert it into database
-            //db.signUserUp(email, hash, username);
+            db.signUserUp(email, hash, username);
         })
     });
     res.end();
     //res.status(201);
-    
 })
 
 module.exports = router;
